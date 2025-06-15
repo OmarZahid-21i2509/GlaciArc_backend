@@ -138,12 +138,12 @@ def upload():
 
         return jsonify({
             "original_image_urls": [
-                f"http://localhost:5000/get_image/{filenames[0]}",
-                f"http://localhost:5000/get_image/{filenames[1]}"
+                f"https://web-production-c79f1.up.railway.app/get_image/{filenames[0]}",
+                f"https://web-production-c79f1.up.railway.app/get_image/{filenames[1]}"
             ],
             "resized_image_urls": [
-                f"http://localhost:5000/get_image/{resized_paths[0]}",
-                f"http://localhost:5000/get_image/{resized_paths[1]}"
+                f"https://web-production-c79f1.up.railway.app/get_image/{resized_paths[0]}",
+                f"https://web-production-c79f1.up.railway.app/get_image/{resized_paths[1]}"
             ]
         })
     
@@ -206,12 +206,12 @@ def segment():
 
         return jsonify({
             "resized_image_urls": [
-                f"http://localhost:5000/get_image/{resized_files[0]}",
-                f"http://localhost:5000/get_image/{resized_files[1]}"
+                f"https://web-production-c79f1.up.railway.app/get_image/{resized_files[0]}",
+                f"https://web-production-c79f1.up.railway.app/get_image/{resized_files[1]}"
             ],
             "segmented_image_urls": [
-                f"http://localhost:5000/get_image/{segmented_paths[0]}",
-                f"http://localhost:5000/get_image/{segmented_paths[1]}"
+                f"https://web-production-c79f1.up.railway.app/get_image/{segmented_paths[0]}",
+                f"https://web-production-c79f1.up.railway.app/get_image/{segmented_paths[1]}"
             ]
         })
 
@@ -292,7 +292,7 @@ def compare():
         print(f"✅ Custom Comparison Image Saved at: {comparison_path}")
 
         return jsonify({
-            "comparison_image_url": f"http://localhost:5000/get_comparison_image/{comparison_filename}"
+            "comparison_image_url": f"https://web-production-c79f1.up.railway.app/get_comparison_image/{comparison_filename}"
         })
 
     except Exception as e:
@@ -393,7 +393,7 @@ def analyze():
     print(f"✅ Processed image saved at {output_path}")
 
     # ✅ Return Processed Image URL
-    processed_image_url = f"http://localhost:5000/get_image/{os.path.basename(output_path)}"
+    processed_image_url = f"https://web-production-c79f1.up.railway.app/get_image/{os.path.basename(output_path)}"
     return jsonify({"message": "Analysis completed", "processed_image_url": processed_image_url})
 
 @app.route('/results', methods=['GET'])
@@ -405,31 +405,31 @@ def get_results():
         # Find original images
         original_files = [f for f in os.listdir(UPLOAD_FOLDER) if not f.startswith("resized_")][-2:]
         original_urls = [
-            f"http://localhost:5000/get_image/{original_files[0]}" if len(original_files) > 0 else None,
-            f"http://localhost:5000/get_image/{original_files[1]}" if len(original_files) > 1 else None,
+            f"https://web-production-c79f1.up.railway.app/get_image/{original_files[0]}" if len(original_files) > 0 else None,
+            f"https://web-production-c79f1.up.railway.app/get_image/{original_files[1]}" if len(original_files) > 1 else None,
         ]
 
         # Find resized images
         resized_files = [f for f in files if f.startswith("resized_")][-2:]
         resized_urls = [
-            f"http://localhost:5000/get_image/{resized_files[0]}" if len(resized_files) > 0 else None,
-            f"http://localhost:5000/get_image/{resized_files[1]}" if len(resized_files) > 1 else None,
+            f"https://web-production-c79f1.up.railway.app/get_image/{resized_files[0]}" if len(resized_files) > 0 else None,
+            f"https://web-production-c79f1.up.railway.app/get_image/{resized_files[1]}" if len(resized_files) > 1 else None,
         ]
 
         # Find segmented images
         segmented_files = [f for f in files if f.startswith("segmented_")][-2:]
         segmented_urls = [
-            f"http://localhost:5000/get_image/{segmented_files[0]}" if len(segmented_files) > 0 else None,
-            f"http://localhost:5000/get_image/{segmented_files[1]}" if len(segmented_files) > 1 else None,
+            f"https://web-production-c79f1.up.railway.app/get_image/{segmented_files[0]}" if len(segmented_files) > 0 else None,
+            f"https://web-production-c79f1.up.railway.app/get_image/{segmented_files[1]}" if len(segmented_files) > 1 else None,
         ]
 
         # Find comparison image
         comparison_files = [f for f in files if f.startswith("custom_comparison_result")]
-        comparison_url = f"http://localhost:5000/get_image/{comparison_files[0]}" if comparison_files else None
+        comparison_url = f"https://web-production-c79f1.up.railway.app/get_image/{comparison_files[0]}" if comparison_files else None
 
         # Find analysis image
         analysis_files = [f for f in files if f.startswith("processed_analysis_image")]
-        analysis_url = f"http://localhost:5000/get_image/{analysis_files[0]}" if analysis_files else None
+        analysis_url = f"https://web-production-c79f1.up.railway.app/get_image/{analysis_files[0]}" if analysis_files else None
 
         # Validate that at least the essential images exist
         if not all([original_urls[0], resized_urls[0], segmented_urls[0]]):
