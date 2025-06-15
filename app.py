@@ -57,7 +57,7 @@ model = smp.Unet(
 
 # ✅ Load Model Weights
 MODEL_PATH = "ModelCheckpoint1.pth"
-MODEL_URL = "https://drive.google.com/uc?export=download&id=1_Zj4jix2qAx6V6a-g0lSWfTULfGc7w42/view?usp=drive_link"  # ← your file's ID here
+MODEL_URL = "https://drive.google.com/uc?export=download&id=1_Zj4jix2qAx6V6a-g0lSWfTULfGc7w42"  # ← your file's ID here
 # ✅ Download if missing
 if not os.path.exists(MODEL_PATH):
     print("⬇️ Downloading Model.pth from Google Drive...")
