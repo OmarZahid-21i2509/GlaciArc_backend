@@ -24,4 +24,6 @@ RUN pip install -r requirements.txt
 EXPOSE 8000
 
 # Run the app using gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "app:app"]
+#CMD ["gunicorn", "--bind", "0.0.0.0:8000", "app:app"]
+CMD ["gunicorn", "--timeout", "120", "--bind", "0.0.0.0:8000", "app:app"]
+
