@@ -15,12 +15,15 @@ import ee
 from zones import get_zones
 import urllib.request
 from flask import make_response
+import time
+
 
 
 
 app = Flask(__name__)
 # CORS(app)  # Allow requests from Flutter Web
-CORS(app, resources={r"/*": {"origins": "https://glaciarc-ui-d898c.web.app"}})
+#CORS(app, resources={r"/*": {"origins": "https://glaciarc-ui-d898c.web.app"}})
+CORS(app, resources={r"/*": {"origins": ["https://glaciarc-ui-d898c.web.app"]}}, supports_credentials=True)
 
 
 
@@ -62,7 +65,8 @@ if not os.path.exists(MODEL_PATH):
     print("✅ Model downloaded.")
 
 try:
-    model.load_state_dict(torch.load(MODEL_PATH, map_location=device))
+    #model.load_state_dict(torch.load(MODEL_PATH, map_location=device))
+    model = torch.load(MODEL_PATH, map_location=device)
     model.eval()
     print("✅ Model Loaded Successfully")
 except Exception as e:
