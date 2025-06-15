@@ -154,23 +154,23 @@ def upload():
 @app.route('/segment', methods=['POST'])
 def segment():
     try:
+        # Debugging
         files = sorted(os.listdir(app.config['OUTPUT_FOLDER']))
+        print("[DEBUG] Files in output folder:", files)
+
         resized_files = [f for f in files if f.startswith("resized_")][-2:]
+        print("[DEBUG] Resized images to segment:", resized_files)
 
         if len(resized_files) < 2:
             return jsonify({"error": "Not enough images for segmentation"}), 404
 
         segmented_paths = []
+
         for file in resized_files:
             image_path = os.path.join(app.config['OUTPUT_FOLDER'], file)
-
-            # ✅ Debugging: Check if file exists
             if not os.path.exists(image_path):
                 return jsonify({"error": f"Resized image not found: {image_path}"}), 500
 
-            print(f"Processing: {image_path}")
-
-            # ✅ Load image and preprocess
             img = Image.open(image_path).convert('RGB')
             input_tensor = transform(img).unsqueeze(0).to(device)
 
@@ -178,12 +178,10 @@ def segment():
                 output = model(input_tensor)
                 output_mask = torch.argmax(output.squeeze(), dim=0).cpu().numpy()
 
-            # ✅ Apply color mapping
             color_mapped_mask = np.zeros((output_mask.shape[0], output_mask.shape[1], 3), dtype=np.uint8)
             for class_index, color in COLOR_MAP.items():
-                color_mapped_mask[output_mask == class_index] = color  
+                color_mapped_mask[output_mask == class_index] = color
 
-            # ✅ Save segmented image
             segmented_filename = f"segmented_{file}"
             segmented_path = os.path.join(app.config['OUTPUT_FOLDER'], segmented_filename)
             cv2.imwrite(segmented_path, cv2.cvtColor(color_mapped_mask, cv2.COLOR_RGB2BGR))
@@ -191,18 +189,10 @@ def segment():
 
             if file == resized_files[-1]:
                 overlay_path = os.path.join('static', 'segmented_overlay.png')
-
-                # Convert from RGB to BGR (OpenCV default) before adding alpha
                 bgr_image = cv2.cvtColor(color_mapped_mask, cv2.COLOR_RGB2BGR)
                 alpha = np.ones(bgr_image.shape[:2], dtype=np.uint8) * 255
                 bgra_image = cv2.merge((bgr_image, alpha))
-
                 cv2.imwrite(overlay_path, bgra_image)
-                print(f"✅ Overlay image saved for map: {overlay_path}")
-
-
-
-            print(f"✅ Segmented image saved at: {segmented_path}")
 
         return jsonify({
             "resized_image_urls": [
@@ -216,6 +206,7 @@ def segment():
         })
 
     except Exception as e:
+        print(f"[ERROR] Segmentation failed: {str(e)}")
         return jsonify({"error": f"Segmentation failed: {str(e)}"}), 500
 
 
