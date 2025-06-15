@@ -14,12 +14,22 @@ import subprocess
 import ee
 from zones import get_zones
 import urllib.request
-
+from flask import make_response
 
 
 
 app = Flask(__name__)
-CORS(app)  # Allow requests from Flutter Web
+# CORS(app)  # Allow requests from Flutter Web
+CORS(app, resources={r"/*": {"origins": "https://glaciarc-ui-d898c.web.app"}})
+
+
+
+
+@app.route("/test")
+def test():
+    response = make_response("Test OK")
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
 
 
 # ✅ Define folders
